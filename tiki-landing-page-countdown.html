@@ -1,0 +1,231 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/shadow.html">
+<link rel="import" href="../paper-styles/typography.html">
+<!--
+`tiki-landing-page-countdown`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="tiki-landing-page-countdown">
+    <template>
+        <style>
+            :host {
+                display: block;
+                --color-text: var(--paper-grey-700);
+            }
+
+            .wrap {
+                @apply(--shadow-elevation-2dp);
+                padding: 16px 60px;
+                text-align: center;
+
+            }
+
+            .head {
+                @apply(--paper-font-body1);
+                margin-top: 0;
+                margin-bottom: 12px;
+                color: var(--color-text);
+            }
+
+            .time {
+                display: inline-block;
+                margin-left: 24px;
+            }
+
+            .time:first-child {
+                margin-left: 0;
+            }
+
+            .time-display {
+                margin-top: 0;
+                margin-bottom: 4px;
+                font-size: 32px;
+                line-height: 28px;
+                font-weight: 500;
+                color: #ffb500;
+            }
+
+            .time-desc {
+                @apply(--paper-font-body1);
+                margin-top: 0;
+                margin-bottom: 0;
+                color: var(--color-text);
+            }
+
+        </style>
+        <template is="dom-if" if="!_expired">
+            <div class="wrap">
+                <p class="head">[[_displayHead(started, ended)]]</p>
+                <div class="times">
+                    <div class="time">
+                        <p class="time-display" id="day">[[_displayTime(days)]]</p>
+                        <p class="time-desc">Ngày</p>
+                    </div>
+                    <div class="time">
+                        <p class="time-display" id="hour">[[_displayTime(hours)]]</p>
+                        <p class="time-desc">Giờ</p>
+                    </div>
+                    <div class="time">
+                        <p class="time-display" id="minute">[[_displayTime(minutes)]]</p>
+                        <p class="time-desc">Phút</p>
+                    </div>
+                    <div class="time">
+                        <p class="time-display" id="second">[[_displayTime(seconds)]]</p>
+                        <p class="time-desc">Giây</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <script>
+
+        const miliSecondsPerSecond = 1000;
+        const miliSecondsPerMinute = 60 * miliSecondsPerSecond;
+        const miliSecondsPerHour = 60 * miliSecondsPerMinute;
+        const miliSecondsPerDay = 24 * miliSecondsPerHour;
+
+        Polymer({
+
+            is: 'tiki-landing-page-countdown',
+
+            properties: {
+                /**
+                 * The time (unix time) to start the count down
+                 */
+                start: Number,
+                /**
+                 * The time (unix time) to end the count down
+                 */
+                end: Number,
+
+
+                days: Number,
+                hours: Number,
+                minutes: Number,
+                seconds: Number,
+                started: {
+                    type: Boolean,
+                    observer : '_startedChanged'
+                },
+                ended: {
+                    type: Boolean,
+                    observer: '_endedChanged'
+                }
+            },
+
+            observers: ['_process(start, end)'],
+
+            _calcRemainingTimes: function (remainingMiliSeconds) {
+                const days = Math.floor(remainingMiliSeconds / miliSecondsPerDay);
+                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerDay;
+
+                const hours = Math.floor(remainingMiliSeconds / miliSecondsPerHour);
+                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerHour;
+
+                const minutes = Math.floor(remainingMiliSeconds / miliSecondsPerMinute);
+                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerMinute;
+
+                const seconds = Math.floor(remainingMiliSeconds / miliSecondsPerSecond);
+                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerSecond;
+
+                return {
+                    days: days,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds,
+                    milliSeconds: remainingMiliSeconds
+                }
+            },
+
+            _updateView: function (remainingMiliSeconds) {
+                if (remainingMiliSeconds > 0) {
+                    var distanceToStopCountDown = this._calcRemainingTimes(remainingMiliSeconds);
+                    this.days = distanceToStopCountDown.days;
+                    this.hours = distanceToStopCountDown.hours;
+                    this.minutes = distanceToStopCountDown.minutes;
+                    this.seconds = distanceToStopCountDown.seconds;
+                    this.milliSeconds = distanceToStopCountDown.milliSeconds;
+                } else {
+                    this.days = 0;
+                    this.hours = 0;
+                    this.minutes = 0;
+                    this.seconds = 0;
+                    this.milliSeconds = 0;
+
+                }
+            },
+
+            _displayTime: function (time) {
+                if (time < 10) {
+                    return '0' + time;
+                } else {
+                    return time.toString();
+                }
+            },
+
+            _displayHead: function(started, ended){
+                if(ended) return 'Chương trình đã kết thúc';
+                return started ? 'Chương trình sẽ kết thúc sau' : 'Chương trình sẽ bắt đầu lúc';
+            },
+
+            _init: function () {
+                clearInterval(this.timer);
+                this.started = null;
+                this.ended = null;
+            },
+
+            _startedChanged: function(value, oldValue) {
+                if ((value === true) && (oldValue === false)) {
+                    this.fire('countdown-started');
+                }
+            },
+
+            _endedChanged: function(value, oldValue) {
+                if (value === true) {
+                    clearInterval(this.timer);
+                    if (oldValue === false) {
+                        this.fire('countdown-ended');
+                    }
+                }
+            },
+
+            _process: function (start, end) {
+                this.hidden = true;
+                this._init();
+                const startTime = start * 1000;
+                const endTime = end * 1000;
+
+                if (start && end) {
+                    this.hidden = false;
+                    this.timer = setInterval(function () {
+                        const currentTime = new Date().getTime();
+                        if (currentTime < startTime) {
+                            // Wait for begin countdown
+                            this.started = false;
+                            this.ended = false;
+                            this._updateView(startTime - currentTime);
+                        } else if (currentTime < endTime) {
+                            // Wait for end countdown
+                            this.started = true;
+                            this.ended = false;
+                            this._updateView(endTime - currentTime);
+
+                        } else {
+                            // Ended
+                            this.started = true;
+                            this.ended = true;
+                        }
+                    }.bind(this), 500);
+                }
+            },
+
+            detached: function () {
+                clearInterval(this.timer);
+            }
+        });
+    </script>
+</dom-module>
