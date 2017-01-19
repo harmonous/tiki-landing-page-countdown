@@ -1,41 +1,41 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>tiki-landing-page-countdown demo</title>
+	<title>tiki-landing-page-countdown demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../tiki-landing-page-countdown.html">
-    <link rel="import" href="../../paper-input/paper-input.html">
+	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+	<link rel="import" href="../tiki-landing-page-countdown.html">
+	<link rel="import" href="../../paper-input/paper-input.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles">
-    </style>
-  </head>
-  <body>
-    <div class="vertical-section-container">
-      <h3>Basic tiki-landing-page-countdown demo</h3>
-      <demo-snippet>
-        <template>
-          <tiki-landing-page-countdown start="1484726400" end="1484974800"></tiki-landing-page-countdown>
-        </template>
+	<style is="custom-style" include="demo-pages-shared-styles">
+	</style>
+</head>
+<body>
+<div class="vertical-section-container">
+	<h3>Basic tiki-landing-page-countdown demo</h3>
+	<demo-snippet>
+		<template>
+			<tiki-landing-page-countdown start="1484726400" end="1484974800"></tiki-landing-page-countdown>
+		</template>
 
-      </demo-snippet>
-    </div>
+	</demo-snippet>
+</div>
 
-    <div class="vertical-section-container">
-      <h3>Basic tiki-landing-page-countdown demo</h3>
-      <demo-snippet>
-        <template is="dom-bind">
-          <paper-input value="{{start}}" label="Time start (unix string timestamp)"></paper-input>
-          <paper-input value="{{end}}" label="Time end (unix string timestamp)"></paper-input>
-          <tiki-landing-page-countdown start="[[start]]" end="[[end]]"></tiki-landing-page-countdown>
-        </template>
-      </demo-snippet>
-    </div>
-  </body>
+<div class="vertical-section-container">
+	<h3>Basic tiki-landing-page-countdown demo</h3>
+	<demo-snippet>
+		<template is="dom-bind">
+			<paper-input value="{{start}}" label="Time start (unix string timestamp)"></paper-input>
+			<paper-input value="{{end}}" label="Time end (unix string timestamp)"></paper-input>
+			<tiki-landing-page-countdown start="[[start]]" end="[[end]]"></tiki-landing-page-countdown>
+		</template>
+	</demo-snippet>
+</div>
+</body>
 </html>

@@ -1,100 +1,193 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>tiki-landing-page-countdown test</title>
+	<title>tiki-landing-page-countdown test</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../moment/moment.js"></script>
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../../web-component-tester/browser.js"></script>
+	<script src="../../moment/moment.js"></script>
 
 
-    <link rel="import" href="../tiki-landing-page-countdown.html">
-  </head>
-  <body>
-    <test-fixture id="basic">
-      <template>
-        <tiki-landing-page-countdown></tiki-landing-page-countdown>
-      </template>
-    </test-fixture>
+	<link rel="import" href="../tiki-landing-page-countdown.html">
+</head>
+<body>
+<test-fixture id="basic">
+	<template>
+		<tiki-landing-page-countdown></tiki-landing-page-countdown>
+	</template>
+</test-fixture>
 
-    <script>
-        var element;
+<test-fixture id="render">
+	<template>
+		<tiki-landing-page-countdown></tiki-landing-page-countdown>
+	</template>
+</test-fixture>
 
-        suite('Check if display time is correct', function () {
+<script>
+	var element;
+	var endedText = 'Chương trình đã kết thúc';
+	var startedText = "Chương trình sẽ kết thúc sau";
+	var beforeText = "Chương trình sẽ bắt đầu lúc";
 
-            setup(function() {
-                element = fixture('basic');
-            });
+	suite('Check if display time is correct', function () {
 
-            test('Display time with number 12 should be "12"', function () {
-                assert.equal(element._displayTime(12), '12');
-            });
-            test('Display time with number 7 should be "07"', function () {
-                assert.equal(element._displayTime(7), '07');
-            });
-            test('Display time with number 0 should be "00"', function () {
-                assert.equal(element._displayTime(0), '00');
-            });
-        });
+		setup(function () {
+			element = fixture('basic');
+		});
 
-        suite('Check if display head text is correct', function() {
+		test('Display time with number 12 should be "12"', function () {
+			assert.equal(element._displayTime(12), '12');
+		});
+		test('Display time with number 7 should be "07"', function () {
+			assert.equal(element._displayTime(7), '07');
+		});
+		test('Display time with number 0 should be "00"', function () {
+			assert.equal(element._displayTime(0), '00');
+		});
+	});
 
-            setup(function() {
-                element = fixture('basic');
-            });
+	suite('Check if display head text is correct', function () {
 
-            var endedText = 'Chương trình đã kết thúc';
-            test('Display head text should be "' + endedText + '" when ended ', function() {
-                assert.equal(element._displayHead(true, true) ,endedText);
-                assert.equal(element._displayHead(false, true) ,endedText);
-            });
+		setup(function () {
+			element = fixture('basic');
+		});
 
-            var startedText = "Chương trình sẽ kết thúc sau";
-            test('Display head text should be "'+ startedText +'" when started ', function() {
-                assert.equal(element._displayHead(true, false) ,startedText);
-            });
+		test('Display head text should be "' + endedText + '" when ended ', function () {
+			assert.equal(element._displayHead(true, true), endedText);
+			assert.equal(element._displayHead(false, true), endedText);
+		});
 
-            var beforeText = "Chương trình sẽ bắt đầu lúc";
-            test('Display head text should be "'+ beforeText +'" before countdown ', function() {
-                assert.equal(element._displayHead(false, false) ,beforeText);
-            });
-        });
+		test('Display head text should be "' + startedText + '" when started ', function () {
+			assert.equal(element._displayHead(true, false), startedText);
+		});
 
-        suite('Check if calc remaining time is correct', function() {
+		test('Display head text should be "' + beforeText + '" before countdown ', function () {
+			assert.equal(element._displayHead(false, false), beforeText);
+		});
+	});
 
-            setup(function() {
-                element = fixture('basic');
-            });
+	suite('Check if calc remaining time is correct', function () {
 
-            var rootTime = '2013-02-25 09:30:26';
-            var timeFormat = 'hh:mm:ss - DD/MM/YYYY';
-            var start;
-            var end;
+		setup(function () {
+			element = fixture('basic');
+		});
 
-            end = moment(rootTime).add(4, 'days').add(1, 'hours').subtract(10, 'seconds').subtract(12, 'minutes');
-            start = moment(rootTime);
-            test('Remaining times from ' + start.format(timeFormat) + ' to '+ end.format(timeFormat) +' should be {days: 4, hours: 0, minutes: 47, seconds: 50, milliSeconds: 0}', function() {
-                var time = element._calcRemainingTimes(end.unix() * 1000 - start.unix() * 1000);
-                console.log('Calc', time);
-                assert.deepEqual(time, {days: 4, hours: 0, minutes: 47, seconds: 50, milliSeconds: 0});
-            });
+		var rootTime = '2013-02-25 09:30:26';
+		var timeFormat = 'hh:mm:ss - DD/MM/YYYY';
+		var start;
+		var end;
 
-            test('Remaining times when pass 0 should be {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0}', function() {
-                var time = element._calcRemainingTimes(0);
-                console.log('Calc', time);
-                assert.deepEqual(time, {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0});
-            });
+		end = moment(rootTime).add(4, 'days').add(1, 'hours').subtract(10, 'seconds').subtract(12, 'minutes');
+		start = moment(rootTime);
+		test('Remaining times from ' + start.format(timeFormat) + ' to ' + end.format(timeFormat) + ' should be {days: 4, hours: 0, minutes: 47, seconds: 50, milliSeconds: 0}', function () {
+			var time = element._calcRemainingTimes(end.unix() * 1000 - start.unix() * 1000);
+			console.log('Calc', time);
+			assert.deepEqual(time, {days: 4, hours: 0, minutes: 47, seconds: 50, milliSeconds: 0});
+		});
 
-            test('Remaining times when pass negative number (-40) should be {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0}', function() {
-                var time = element._calcRemainingTimes(-40);
-                console.log('Calc', time);
-                assert.deepEqual(time, {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0});
-            });
+		test('Remaining times when pass 0 should be {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0}', function () {
+			var time = element._calcRemainingTimes(0);
+			console.log('Calc', time);
+			assert.deepEqual(time, {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0});
+		});
 
-        });
-    </script>
-  </body>
+		test('Remaining times when pass negative number (-40) should be {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0}', function () {
+			var time = element._calcRemainingTimes(-40);
+			console.log('Calc', time);
+			assert.deepEqual(time, {days: 0, hours: 0, minutes: 0, seconds: 0, milliSeconds: 0});
+		});
+
+	});
+
+	suite('Expect render date correctly', function () {
+
+		setup(function () {
+			element = fixture('render');
+		});
+
+		test('Render day is correct', function () {
+			element.days = 1;
+			assert.equal(element.$.day.textContent, '01');
+			element.days = 10;
+			assert.equal(element.$.day.textContent, '10');
+			element.days = 0;
+			assert.equal(element.$.day.textContent, '00');
+		});
+
+		test('Render hour is correct', function () {
+			element.hours = 12;
+			assert.equal(element.$.hour.textContent, '12');
+			element.hours = 3;
+			assert.equal(element.$.hour.textContent, '03');
+			element.hours = 0;
+			assert.equal(element.$.hour.textContent, '00');
+		});
+
+		test('Render minute is correct', function () {
+			element.minutes = 12;
+			assert.equal(element.$.minute.textContent, '12');
+			element.minutes = 3;
+			assert.equal(element.$.minute.textContent, '03');
+			element.minutes = 0;
+			assert.equal(element.$.minute.textContent, '00');
+		});
+
+		test('Render second is correct', function () {
+			element.seconds = 12;
+			assert.equal(element.$.second.textContent, '12');
+			element.seconds = 3;
+			assert.equal(element.$.second.textContent, '03');
+			element.seconds = 0;
+			assert.equal(element.$.second.textContent, '00');
+		});
+
+		var rootTime = '2013-02-25 09:30:26';
+		var timeFormat = 'hh:mm:ss - DD/MM/YYYY';
+		var start;
+		var end;
+
+		end = moment(rootTime).add(4, 'days').add(1, 'hours').subtract(10, 'seconds').subtract(12, 'minutes');
+		start = moment(rootTime);
+		test('Render remaining times from ' + start.format(timeFormat) + ' to ' + end.format(timeFormat) + ' is correct (04d : 00h : 47m : 50s)', function () {
+			element._updateView(end.unix() * 1000 - start.unix() * 1000);
+			assert.equal(element.$.day.textContent, '04');
+			assert.equal(element.$.minute.textContent, '47');
+			assert.equal(element.$.hour.textContent, '00');
+			assert.equal(element.$.second.textContent, '50');
+		});
+	});
+
+	suite('Expect render head correctly', function () {
+
+		setup(function () {
+			element = fixture('render');
+		});
+
+		test('Display head text should be "' + endedText + '" when ended ', function () {
+			element.started = true;
+			element.ended = true;
+			assert.equal(element.$.headText.textContent, endedText);
+			element.started = false;
+			element.ended = true;
+			assert.equal(element.$.headText.textContent, endedText);
+		});
+
+		test('Display head text should be "' + startedText + '" when started ', function () {
+			element.started = true;
+			element.ended = false;
+			assert.equal(element.$.headText.textContent, startedText);
+		});
+
+		test('Display head text should be "' + beforeText + '" before countdown ', function () {
+			element.started = false;
+			element.ended = false;
+			assert.equal(element.$.headText.textContent, beforeText);
+		});
+
+	});
+</script>
+</body>
 </html>
