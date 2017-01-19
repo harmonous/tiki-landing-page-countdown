@@ -72,7 +72,7 @@ Custom property | Description | Default
 
         </style>
         <div class="wrap">
-            <p class="head" id="headText">[[_displayHead(started, ended)]]</p>
+            <p class="head" id="headText">[[_displayHead(started, ended, title)]]</p>
             <div class="times">
                 <div class="time">
                     <p class="time-display" id="day">[[_displayTime(days)]]</p>
@@ -123,8 +123,10 @@ Custom property | Description | Default
 				 * The time (unix time) to end the count down. Need pass to element to start the countdown.
 				 */
 				end: Number,
-
-
+				/**
+				 * Title for the countdown. If the title isn't provided, will use default text title.
+				 */
+                title: String,
 				days: Number,
 				hours: Number,
 				minutes: Number,
@@ -198,7 +200,8 @@ Custom property | Description | Default
 				}
 			},
 
-			_displayHead: function (started, ended) {
+			_displayHead: function (started, ended, title) {
+				if(title) return title;
 				if (ended) return 'Chương trình đã kết thúc';
 				return started ? 'Chương trình sẽ kết thúc sau' : 'Chương trình sẽ bắt đầu lúc';
 			},

@@ -28,12 +28,23 @@
 </div>
 
 <div class="vertical-section-container">
+	<h3>Basic tiki-landing-page-countdown demo with title</h3>
+	<demo-snippet>
+		<template>
+			<tiki-landing-page-countdown start="1484726400" end="1484974800" title="Countdown"></tiki-landing-page-countdown>
+		</template>
+
+	</demo-snippet>
+</div>
+
+<div class="vertical-section-container">
 	<h3>Basic tiki-landing-page-countdown demo</h3>
 	<demo-snippet>
 		<template is="dom-bind">
+			<paper-input value="{{title}}" label="Title for the countdown"></paper-input>
 			<paper-input value="{{start}}" label="Time start (unix string timestamp)"></paper-input>
 			<paper-input value="{{end}}" label="Time end (unix string timestamp)"></paper-input>
-			<tiki-landing-page-countdown start="[[start]]" end="[[end]]"></tiki-landing-page-countdown>
+			<tiki-landing-page-countdown start="[[start]]" end="[[end]]" title="[[title]]"></tiki-landing-page-countdown>
 		</template>
 	</demo-snippet>
 </div>
