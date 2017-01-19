@@ -31,8 +31,8 @@
       <h3>Basic tiki-landing-page-countdown demo</h3>
       <demo-snippet>
         <template is="dom-bind">
-          <paper-input value="{{start}}"></paper-input>
-          <paper-input value="{{end}}"></paper-input>
+          <paper-input value="{{start}}" label="Time start (unix string timestamp)"></paper-input>
+          <paper-input value="{{end}}" label="Time end (unix string timestamp)"></paper-input>
           <tiki-landing-page-countdown start="[[start]]" end="[[end]]"></tiki-landing-page-countdown>
         </template>
       </demo-snippet>

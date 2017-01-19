@@ -56,29 +56,27 @@
             }
 
         </style>
-        <template is="dom-if" if="!_expired">
-            <div class="wrap">
-                <p class="head">[[_displayHead(started, ended)]]</p>
-                <div class="times">
-                    <div class="time">
-                        <p class="time-display" id="day">[[_displayTime(days)]]</p>
-                        <p class="time-desc">Ngày</p>
-                    </div>
-                    <div class="time">
-                        <p class="time-display" id="hour">[[_displayTime(hours)]]</p>
-                        <p class="time-desc">Giờ</p>
-                    </div>
-                    <div class="time">
-                        <p class="time-display" id="minute">[[_displayTime(minutes)]]</p>
-                        <p class="time-desc">Phút</p>
-                    </div>
-                    <div class="time">
-                        <p class="time-display" id="second">[[_displayTime(seconds)]]</p>
-                        <p class="time-desc">Giây</p>
-                    </div>
+        <div class="wrap">
+            <p class="head">[[_displayHead(started, ended)]]</p>
+            <div class="times">
+                <div class="time">
+                    <p class="time-display" id="day">[[_displayTime(days)]]</p>
+                    <p class="time-desc">Ngày</p>
+                </div>
+                <div class="time">
+                    <p class="time-display" id="hour">[[_displayTime(hours)]]</p>
+                    <p class="time-desc">Giờ</p>
+                </div>
+                <div class="time">
+                    <p class="time-display" id="minute">[[_displayTime(minutes)]]</p>
+                    <p class="time-desc">Phút</p>
+                </div>
+                <div class="time">
+                    <p class="time-display" id="second">[[_displayTime(seconds)]]</p>
+                    <p class="time-desc">Giây</p>
                 </div>
             </div>
-        </template>
+        </div>
     </template>
 
     <script>
@@ -109,7 +107,7 @@
                 seconds: Number,
                 started: {
                     type: Boolean,
-                    observer : '_startedChanged'
+                    observer: '_startedChanged'
                 },
                 ended: {
                     type: Boolean,
@@ -120,43 +118,52 @@
             observers: ['_process(start, end)'],
 
             _calcRemainingTimes: function (remainingMiliSeconds) {
-                const days = Math.floor(remainingMiliSeconds / miliSecondsPerDay);
-                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerDay;
 
-                const hours = Math.floor(remainingMiliSeconds / miliSecondsPerHour);
-                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerHour;
+                var days,
+                    hours,
+                    minutes,
+                    seconds,
+                    milliSeconds;
 
-                const minutes = Math.floor(remainingMiliSeconds / miliSecondsPerMinute);
-                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerMinute;
+                if (remainingMiliSeconds <= 0) {
+                    days
+                        = hours
+                        = minutes
+                        = seconds
+                        = milliSeconds
+                        = 0;
+                }
+                else {
+                    days = Math.floor(remainingMiliSeconds / miliSecondsPerDay);
+                    remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerDay;
 
-                const seconds = Math.floor(remainingMiliSeconds / miliSecondsPerSecond);
-                remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerSecond;
+                    hours = Math.floor(remainingMiliSeconds / miliSecondsPerHour);
+                    remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerHour;
+
+                    minutes = Math.floor(remainingMiliSeconds / miliSecondsPerMinute);
+                    remainingMiliSeconds = remainingMiliSeconds % miliSecondsPerMinute;
+
+                    seconds = Math.floor(remainingMiliSeconds / miliSecondsPerSecond);
+
+                    milliSeconds = remainingMiliSeconds % miliSecondsPerSecond;
+                }
 
                 return {
                     days: days,
                     hours: hours,
                     minutes: minutes,
                     seconds: seconds,
-                    milliSeconds: remainingMiliSeconds
+                    milliSeconds: milliSeconds
                 }
             },
 
             _updateView: function (remainingMiliSeconds) {
-                if (remainingMiliSeconds > 0) {
-                    var distanceToStopCountDown = this._calcRemainingTimes(remainingMiliSeconds);
-                    this.days = distanceToStopCountDown.days;
-                    this.hours = distanceToStopCountDown.hours;
-                    this.minutes = distanceToStopCountDown.minutes;
-                    this.seconds = distanceToStopCountDown.seconds;
-                    this.milliSeconds = distanceToStopCountDown.milliSeconds;
-                } else {
-                    this.days = 0;
-                    this.hours = 0;
-                    this.minutes = 0;
-                    this.seconds = 0;
-                    this.milliSeconds = 0;
-
-                }
+                const distanceToStopCountDown = this._calcRemainingTimes(remainingMiliSeconds);
+                this.days = distanceToStopCountDown.days;
+                this.hours = distanceToStopCountDown.hours;
+                this.minutes = distanceToStopCountDown.minutes;
+                this.seconds = distanceToStopCountDown.seconds;
+                this.milliSeconds = distanceToStopCountDown.milliSeconds;
             },
 
             _displayTime: function (time) {
@@ -167,8 +174,8 @@
                 }
             },
 
-            _displayHead: function(started, ended){
-                if(ended) return 'Chương trình đã kết thúc';
+            _displayHead: function (started, ended) {
+                if (ended) return 'Chương trình đã kết thúc';
                 return started ? 'Chương trình sẽ kết thúc sau' : 'Chương trình sẽ bắt đầu lúc';
             },
 
@@ -178,13 +185,13 @@
                 this.ended = null;
             },
 
-            _startedChanged: function(value, oldValue) {
+            _startedChanged: function (value, oldValue) {
                 if ((value === true) && (oldValue === false)) {
                     this.fire('countdown-started');
                 }
             },
 
-            _endedChanged: function(value, oldValue) {
+            _endedChanged: function (value, oldValue) {
                 if (value === true) {
                     clearInterval(this.timer);
                     if (oldValue === false) {
@@ -218,6 +225,7 @@
                             // Ended
                             this.started = true;
                             this.ended = true;
+                            this._updateView(0);
                         }
                     }.bind(this), 500);
                 }
