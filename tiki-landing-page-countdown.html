@@ -33,7 +33,7 @@ Custom property | Description | Default
 
             .wrap {
                 @apply(--shadow-elevation-2dp);
-                padding: 16px 60px;
+                padding: 16px;
                 text-align: center;
                 background-color: var(--color-bg-wrap);
             }
@@ -103,7 +103,7 @@ Custom property | Description | Default
 
 		Polymer({
 			is: 'tiki-landing-page-countdown',
-			hostAttribute: {
+			hostAttributes: {
 				hidden: true
 			},
 			/**
@@ -118,15 +118,24 @@ Custom property | Description | Default
 				/**
 				 * The time (unix time) to start the count down. Need pass to element to start the countdown.
 				 */
-				start: Number,
+				start: {
+					type: Number,
+                    value: null,
+                },
 				/**
 				 * The time (unix time) to end the count down. Need pass to element to start the countdown.
 				 */
-				end: Number,
+				end: {
+					type: Number,
+					value: null,
+				},
 				/**
 				 * Title for the countdown. If the title isn't provided, will use default text title.
 				 */
-                title: String,
+                title: {
+                	type: String,
+                	value: null
+                },
 				days: Number,
 				hours: Number,
 				minutes: Number,
@@ -232,8 +241,6 @@ Custom property | Description | Default
 			_process: function (start, end) {
 				this.hidden = true;
 				this._init();
-
-				if (start && end) {
 					const startTime = start * 1000;
 					const endTime = end * 1000;
 
@@ -269,7 +276,7 @@ Custom property | Description | Default
 	                    }.bind(this), 500)
                     }
 
-				}
+
 			},
 
 			detached: function () {

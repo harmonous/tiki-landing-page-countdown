@@ -67,6 +67,11 @@
 		test('Display head text should be "' + beforeText + '" before countdown ', function () {
 			assert.equal(element._displayHead(false, false), beforeText);
 		});
+
+		test('Display head text should be "Countdown"', function () {
+			element.title = "Countdown";
+			assert.equal(element._displayHead(false, false, 'Countdown'), 'Countdown');
+		});
 	});
 
 	suite('Check if calc remaining time is correct', function () {
@@ -185,6 +190,13 @@
 			element.started = false;
 			element.ended = false;
 			assert.equal(element.$.headText.textContent, beforeText);
+		});
+
+		test('Display head text should be "Countdown"', function () {
+			element.started = false;
+			element.ended = false;
+			element.title = 'Countdown';
+			assert.equal(element.$.headText.textContent, 'Countdown');
 		});
 
 	});
