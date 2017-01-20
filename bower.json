@@ -1,5 +1,6 @@
 {
   "name": "tiki-landing-page-countdown",
+  "version": "0.1",
   "main": "tiki-landing-page-countdown.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
@@ -13,5 +14,23 @@
     "iron-input": "PolymerElements/iron-input#^1.0.10",
     "paper-input": "PolymerElements/paper-input#^1.1.22",
     "moment": "^2.17.1"
-  }
+  },
+  "homepage": "https://github.com/tiki-elements/tiki-landing-page-countdown",
+  "authors": [
+    "Tiki corporation"
+  ],
+  "description": "Tiki landing page countdown",
+  "keywords": [
+    "polymer",
+    "Tiki"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
