@@ -2,13 +2,6 @@
 	"plugins": {
 		"sauce": {
 			"browsers": [{
-				"browserName": "Safari",
-				"deviceName": "iPhone 6 Device",
-				"deviceOrientation": "portrait",
-				"platformVersion": "8.4",
-				"platformName": "iOS",
-				"appiumVersion": "1.5.3"
-			}, {
 				"browserName": "microsoftedge",
 				"platform": "Windows 10",
 				"version": ""
