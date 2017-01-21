@@ -7,11 +7,11 @@
 			"disabled": true,
 			"browsers": [{
 				"browserName": "Safari",
-				"deviceName": "iPhone 5 Simulator",
+				"deviceName": "iPhone 6 Device",
 				"deviceOrientation": "portrait",
-				"platformVersion": "8.1",
+				"platformVersion": "8.4",
 				"platformName": "iOS",
-				"appiumVersion": "1.6.3"
+				"appiumVersion": "1.5.3"
 			}, {
 				"browserName": "microsoftedge",
 				"platform": "Windows 10",
@@ -31,7 +31,7 @@
 			}, {
 				"browserName": "chrome",
 				"platform": "Linux",
-				"version": "dev"
+				"version": ""
 			}, {
 				"browserName": "chrome",
 				"platform": "Windows 10",
